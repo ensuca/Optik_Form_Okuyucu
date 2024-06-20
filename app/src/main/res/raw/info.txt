@@ -1,0 +1,46 @@
+scoreView = findViewById(R.id.score_view);
+        studentNumber = findViewById(R.id.student_number);
+        saveButton = findViewById(R.id.save_button);
+        checkAnswersButton = findViewById(R.id.check_answers_button);
+
+        // Set a placeholder score
+        score = 85; // Replace with actual score calculation logic
+        scoreView.setText("Alınan Puan: " + score);
+
+        checkAnswersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the score when "Check Answers" button is clicked
+                scoreView.setText("Alınan Puan: " + score);
+            }
+        });
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String studentNum = studentNumber.getText().toString().trim();
+                if (studentNum.isEmpty()) {
+                    Toast.makeText(AnswersActivity.this, "Öğrenci Numarası Girmelisiniz", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                saveStudentGrade(studentNum, String.valueOf(score));
+            }
+        });
+    }
+
+    private void saveStudentGrade(String studentNum, String grade) {
+        File path = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "OMR");
+        if (!path.exists()) {
+            path.mkdirs();
+        }
+
+        File file = new File(path, "student_grades.txt");
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.append(studentNum).append(" ").append(grade).append("\n");
+            Toast.makeText(this, "Not Kaydedildi", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Toast.makeText(this, "Bir Hata Oluştu", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+}These are the images the scanner works fine on
